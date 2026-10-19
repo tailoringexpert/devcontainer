@@ -1,0 +1,83 @@
+---
+services:
+  db:
+    image: mariadb:lts-ubi
+    container_name: devcontainer-demo-db
+    hostname: devcontainer-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: test1234
+      TZ: Europe/Berlin
+    command: "--init_file=/docker-entrypoint-initdb.d/bootstrap.sql"
+    healthcheck:
+      test:
+        - CMD
+        - healthcheck.sh
+        - "--connect"
+        - "--innodb_initialized"
+      interval: 15s
+      timeout: 5s
+      retries: 6
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./services/db/bootstrap.sql:/docker-entrypoint-initdb.d/bootstrap.sql:ro
+      - db:/var/lib/mysql:Z
+
+  keycloak:
+    image: keycloak/keycloak:26.4
+    container_name: devcontainer-demo-keycloak
+    hostname: devcontainer-keycloak
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      KEYCLOAK_PRODUCTION: false
+      KC_DB: mariadb
+      KC_HTTP_ENABLED: false
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_CACHE: local
+      KC_LOG_LEVEL: info
+      KC_HEALTH_ENABLED: true
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: test1234
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: test1234
+      KC_DB_URL_HOST: devcontainer-db
+      KC_DB_URL_PORT: 3306
+      KC_DB_SCHEMA: keycloak
+    command:
+      - start-dev
+      - "--import-realm"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "exec 3<>/dev/tcp/127.0.0.1/9000; echo -e 'GET /auth/health/ready HTTP/1.1\r\nHost: localhost:9000\r\nConnection: close\r\n\r\n' >&3;cat <&3 | grep -q '\"status\": \"UP\"' && exit 0 || exit 1"
+      interval: 15s
+      timeout: 2s
+      retries: 15
+    volumes:
+      - ./services/keycloak/app/lib/mariadb-java-client-3.5.3.jar:/opt/keycloak/providers/mariadb.jar:ro
+      - ./services/keycloak/realms:/opt/keycloak/data/import
+      - ./services/keycloak/themes:/opt/keycloak/themes
+
+  devcontainer:
+    image: ghcr.io/tailoringexpert/devcontainer:latest
+    container_name: devcontainer-demo
+    hostname: demo
+    user: developer
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sleep infinity
+    volumes:
+      - workspace:/home/developer/workspace
+      - m2:/home/developer/.m2
+      - gnupg:/home/developer/.gnupg
+
+volumes:
+  db:
+  workspace:
+  m2:
+  gnupg:

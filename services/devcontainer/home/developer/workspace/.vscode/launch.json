@@ -1,0 +1,52 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Current file with build",
+      "request": "launch",
+      "mainClass": "${file}",
+      "preLaunchTask": "build"
+    },
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "demo",
+      "request": "launch",
+      "mainClass": "eu.tailoringexpert.DemoApp",
+      "projectName": "tailoringexpert-demo-integrationtest",
+      "vmArgs": "-Dspring.main.lazy-initialization=true",
+      "envFile": "${workspaceFolder}/demo/tailoringexpert-demo-integrationtest/.env.devcontainer"
+    },
+    {
+      "name": "web",
+      "request": "launch",
+      "args": [
+        "run-script",
+        "devcontainer"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "cwd": "${workspaceFolder}/web"
+    },
+    {
+      "name": "webbowser",
+      "type": "editor-browser",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/web/src",
+      "pathMapping": {
+        "url": "http://localhost:3000/",
+        "path": "${workspaceFolder}/web"
+      }
+    }
+  ]
+}

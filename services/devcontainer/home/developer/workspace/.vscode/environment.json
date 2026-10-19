@@ -1,0 +1,54 @@
+{
+  "repositories": [
+    {
+      "name": "dependencies",
+      "url": "https://github.com/tailoringexpert/dependencies.git",
+      "username": "",
+      "email": "",
+      "sign": true,
+      "signkey": ""
+    },
+    {
+      "name": "platform",
+      "url": "https://github.com/tailoringexpert/platform.git",
+      "username": "",
+      "email": "",
+      "sign": true,
+      "signkey": ""
+    },
+    {
+      "name": "web",
+      "url": "https://github.com/tailoringexpert/web.git",
+      "username": "",
+      "email": "",
+      "sign": true,
+      "signkey": ""
+    }
+  ],
+  "gitcredentials": [
+    {
+      "username": "",
+      "password": "",
+      "domain": "github.com"
+    }
+  ],
+  "gpgkeys": [
+    {
+      "key": "",
+      "passphrase": "",
+      "email": ""
+    }
+  ],
+  "maven": {
+    "server": {
+      "id": "github",
+      "user": "",
+      "token": ""
+    },
+    "sonar": {
+      "acivate": "false",
+      "url": "",
+      "token": ""
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "java.jdt.ls.vmargs": "-Xmx2G -XX:+UseG1GC",
+  "java.compile.nullAnalysis.mode": "disabled",
+  "explorer.compactFolders": false,
+  "java.project.referencedLibraries": [],
+  "java.dependency.showHierarchy": true,
+  "java.dependency.packagePresentation": "hierarchical",
+  "java.sources.organizeImports.starThreshold": 999,
+  "java.sources.organizeImports.staticStarThreshold": 999,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "maven.view.hierarchical": true,
+  "files.watcherExclude": {
+    "**/target": true
+  },
+  "java.debug.settings.onBuildFailureProceed": true,
+  "java.maven.downloadSources": true,
+  "java.maven.downloadJavadoc": true,
+  "maven.view": "hierarchical"
+}

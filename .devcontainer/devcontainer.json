@@ -1,0 +1,73 @@
+{
+  "name": "demo@coder",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "devcontainer",
+  "workspaceFolder": "/home/developer/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": false
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "java.jdt.ls.java.home": "/opt/java/openjdk",
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "dev.containers.shareCredentialHelper": false
+      },
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack",
+        "vscjava.vscode-lombok",
+        "sonarsource.sonarlint-vscode",
+        "editorconfig.editorconfig",
+        "vue.volar",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "k--kato.intellij-idea-keybindings",
+        "cweijan.vscode-mysql-client2",
+        "cucumberopen.cucumber-official",
+        "alexkrechik.cucumberautocomplete",
+        "vscjava.vscode-maven",
+        "formulahendry.code-runner",
+        "mikestead.dotenv",
+        "jebbs.plantuml",
+        "redhat.vscode-xml",
+        "niav.javaserialversionuidcomplete",
+        "tomoki1207.pdf",
+        "ms-vscode-remote.remote-containers",
+        "stephanvs.dot",
+        "github.vscode-github-actions",
+        "cweijan.vscode-office",
+        "cweijan.dbclient-jdbc",
+        "eamodio.gitlens"
+      ]
+    }
+  },
+  "forwardPorts": [
+    "devcontainer-db:3306"
+  ],
+  "portsAttributes": {
+    "3000": {
+      "label": "web"
+    },
+    "8090": {
+      "label": "platform"
+    },
+    "devcontainer-db:3306": {
+      "label": "mariadb"
+    },
+  },
+  "shutdownAction": "stopCompose",
+  "settings": {
+    "terminal.integrated.env.linux": {
+      "GPG_TTY": "${env:TERM}"
+    }
+  }
+}
