@@ -64,8 +64,8 @@ services:
 
   devcontainer:
     image: ghcr.io/tailoringexpert/devcontainer:latest
-    container_name: devcontainer-demo
-    hostname: demo
+    container_name: devcontainer-tx
+    hostname: tx
     user: developer
     depends_on:
       db:
