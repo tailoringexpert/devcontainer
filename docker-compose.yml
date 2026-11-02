@@ -2,7 +2,7 @@
 services:
   db:
     image: mariadb:lts-ubi
-    container_name: devcontainer-demo-db
+    container_name: devcontainer-tx-db
     hostname: devcontainer-db
     restart: unless-stopped
     environment:
@@ -25,7 +25,7 @@ services:
 
   keycloak:
     image: keycloak/keycloak:26.4
-    container_name: devcontainer-demo-keycloak
+    container_name: devcontainer-tx-keycloak
     hostname: devcontainer-keycloak
     depends_on:
       db:
@@ -63,7 +63,7 @@ services:
       - ./services/keycloak/themes:/opt/keycloak/themes
 
   devcontainer:
-    image: ghcr.io/tailoringexpert/devcontainer:jdk25-coder
+    image: ghcr.io/tailoringexpert/devcontainer:latest
     container_name: devcontainer-tx
     hostname: tx
     user: developer
