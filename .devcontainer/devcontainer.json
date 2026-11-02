@@ -19,7 +19,10 @@
         "editor.codeActionsOnSave": {
           "source.fixAll.eslint": "explicit"
         },
-        "dev.containers.shareCredentialHelper": false
+        "dev.containers.shareCredentialHelper": false,
+        "terminal.integrated.env.linux": {
+          "GPG_TTY": "${env:TERM}"
+        }
       },
       "extensions": [
         "vscjava.vscode-java-pack",
@@ -62,13 +65,8 @@
     },
     "devcontainer-db:3306": {
       "label": "mariadb"
-    },
-  },
-  "shutdownAction": "stopCompose",
-  "settings": {
-    "terminal.integrated.env.linux": {
-      "GPG_TTY": "${env:TERM}"
     }
   },
+  "shutdownAction": "stopCompose",
   "postCreateCommand": "git config --global credential.helper store"
 }
