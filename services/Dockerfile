@@ -23,7 +23,7 @@ RUN \
 COPY --chown=$USER:$USER ./devcontainer/home/developer/ $USER_HOME_DIR
     
 RUN \
-    chmod a+x $USER_HOME_DIR/bin/repos.sh $USER_HOME_DIR/bin/gpgkeys.sh && \
+    chmod a+x $USER_HOME_DIR/bin/*.sh  && \
     mkdir -p $USER_HOME_DIR/workspace/.vscode $USER_HOME_DIR/.m2 $USER_HOME_DIR/.gnupg && \
     chown -R $USER:$USER $USER_HOME_DIR/workspace $USER_HOME_DIR/.m2 $USER_HOME_DIR/.gnupg
     

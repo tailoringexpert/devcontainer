@@ -63,9 +63,9 @@ services:
       - ./services/keycloak/themes:/opt/keycloak/themes
 
   devcontainer:
-    image: ghcr.io/tailoringexpert/devcontainer:latest
-    container_name: devcontainer-demo
-    hostname: demo
+    image: ghcr.io/tailoringexpert/devcontainer:jdk25-coder
+    container_name: devcontainer-tx
+    hostname: tx
     user: developer
     depends_on:
       db:
