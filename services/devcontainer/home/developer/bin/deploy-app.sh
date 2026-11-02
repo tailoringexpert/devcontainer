@@ -59,12 +59,12 @@ REPO_URL=$(awk -v pattern="$SEARCH_PATTERN" -v prop="$PROPERTY_NAME" '
 ' "$SETTINGS_FILE" | sed -e "s/.*<$PROPERTY_NAME>//" -e "s/<\/$PROPERTY_NAME>.*//" | xargs)
 
 
-echo "deploy-file tailoringexpert-bootapp-$VERSION-exec.jar -> $REPO_URL"
+echo "deploy-file tailoringexpert-bootapp-$VERSION-platform.jar -> $REPO_URL"
 cd $PLATFORM_PATH
 mvn deploy:deploy-file \
-  -Dfile=tailoringexpert-bootapp/target/tailoringexpert-bootapp-$VERSION-exec.jar \
+  -Dfile=tailoringexpert-bootapp/target/tailoringexpert-bootapp-$VERSION-platform.jar \
   -DpomFile=tailoringexpert-bootapp/pom.xml \
-  -Dclassifier=exec \
+  -Dclassifier=platform \
   -DrepositoryId=$REPOSITORY_ID \
   -Durl=$REPO_URL 
 
