@@ -69,5 +69,6 @@
     "terminal.integrated.env.linux": {
       "GPG_TTY": "${env:TERM}"
     }
-  }
+  },
+  "postCreateCommand": "git config --global credential.helper store"
 }
