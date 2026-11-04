@@ -7,10 +7,16 @@ ARG USER_HOME_DIR="/home/$USER"
 ARG NODE_VERSION=lts
 
 RUN \
+    mkdir -p -m 755 /etc/apt/keyrings \
+    && curl -fsSL https://github.com | gpg --dearmor -o /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://github.com stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null 
+
+RUN \
     curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
     apt-get update &&  \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends sudo vim less dos2unix nodejs pinentry-curses graphviz git-flow git-lfs && \
+    apt-get install -y --no-install-recommends sudo vim less dos2unix nodejs pinentry-curses graphviz git-flow git-lfs gh && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 RUN \
