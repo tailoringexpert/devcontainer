@@ -3,20 +3,16 @@ FROM ghcr.io/tailoringexpert/maven:${TAILORINGEXPERT_MAVEN_VERSION}
 
 ARG USER=developer
 ARG USER_HOME_DIR="/home/$USER"
-
 ARG NODE_VERSION=lts
 
 RUN \
-    mkdir -p -m 755 /etc/apt/keyrings \
-    && curl -fsSL https://github.com | gpg --dearmor -o /etc/apt/keyrings/githubcli-archive-keyring.gpg \
-    && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://github.com stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null 
-
-RUN \
+    apt-get update && apt-get install -y --no-install-recommends curl ca-certificates gnupg && \
+    mkdir -p -m 755 /etc/apt/keyrings && \
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg -o /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+    chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
     curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
-    apt-get update &&  \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends sudo vim less dos2unix nodejs pinentry-curses graphviz git-flow git-lfs gh && \
+    apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends sudo vim less dos2unix nodejs pinentry-curses graphviz git-flow git-lfs gh && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 RUN \
@@ -27,14 +23,11 @@ RUN \
     chmod 0440 /etc/sudoers.d/$USER
 
 COPY --chown=$USER:$USER ./devcontainer/home/developer/ $USER_HOME_DIR
-    
+
 RUN \
     chmod a+x $USER_HOME_DIR/bin/*.sh  && \
     mkdir -p $USER_HOME_DIR/workspace/.vscode $USER_HOME_DIR/.m2 $USER_HOME_DIR/.gnupg && \
     chown -R $USER:$USER $USER_HOME_DIR/workspace $USER_HOME_DIR/.m2 $USER_HOME_DIR/.gnupg
-    
-RUN \
-    git config --global credential.helper store
     
 RUN \
     chmod 0700 $USER_HOME_DIR/.gnupg
@@ -47,4 +40,6 @@ VOLUME \
     $USER_HOME_DIR/.gnupg
         
 USER $USER
+RUN \
+    git config --global credential.helper store
 
