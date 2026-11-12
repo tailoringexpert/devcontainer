@@ -52,13 +52,24 @@ repo() {
 
   echo "Updating git config..."
   cd ~/workspace/$NAME 2>/dev/null || cd "~/workspace/$NAME" || exit 1
+
+  SERVER=$(echo "$URL" | sed -E 's|^https?://([^/@]+@)?([^/:]+).*|\2|')
+  CREDENTIAL=$(jq -c --arg srv "$SERVER" '.gitcredentials[] | select(.domain == $srv)' "$CONF_DIR/environment.json")
+  USERNAME=$(jq -r '.username' <<< "$CREDENTIAL")
+  PASSWORD=$(jq -r '.password' <<< "$CREDENTIAL")
+  REMOTE_URL="${URL/https:\/\//https:\/\/$USERNAME:$PASSWORD@}"
+  
+  echo "Setting remote url $REMOTE_URL"
+  git config --local remote.origin.url "$REMOTE_URL"
+
   git config commit.gpgsign "$SIGN"
   git config user.signingkey "$SIGNKEY"
   git config user.name "$USERNAME"
   git config user.email "$EMAIL"
-  echo "--- Fertig ---"
+  echo "--- Done ---"
   echo 
 }
+
 
 jq -c '.gitcredentials[]' $CONF_DIR/environment.json | while read -r item; do
   credential "$item"
