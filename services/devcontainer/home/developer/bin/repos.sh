@@ -43,9 +43,16 @@ repo() {
   mkdir -p ~/workspace
 
   cd ~/workspace || exit 1
+
+  SERVER=$(echo "$URL" | sed -E 's|^https?://([^/@]+@)?([^/:]+).*|\2|')
+  CREDENTIAL=$(jq -c --arg srv "$SERVER" '.gitcredentials[] | select(.domain == $srv)' "$CONF_DIR/environment.json")
+  USERNAME=$(jq -r '.username' <<< "$CREDENTIAL")
+  PASSWORD=$(jq -r '.password' <<< "$CREDENTIAL")
+  REMOTE_URL="${URL/https:\/\//https:\/\/$USERNAME:$PASSWORD@}"
+
   if [ ! -d "$NAME" ]; then
     echo "cloning $URL into $NAME"
-    git clone "$URL" "$NAME"
+    git clone "$REMOTE_URL" "$NAME"
   else
     echo "repo $NAME already cloned"
   fi
@@ -53,15 +60,8 @@ repo() {
   echo "Updating git config..."
   cd ~/workspace/$NAME 2>/dev/null || cd "~/workspace/$NAME" || exit 1
 
-  SERVER=$(echo "$URL" | sed -E 's|^https?://([^/@]+@)?([^/:]+).*|\2|')
-  CREDENTIAL=$(jq -c --arg srv "$SERVER" '.gitcredentials[] | select(.domain == $srv)' "$CONF_DIR/environment.json")
-  USERNAME=$(jq -r '.username' <<< "$CREDENTIAL")
-  PASSWORD=$(jq -r '.password' <<< "$CREDENTIAL")
-  REMOTE_URL="${URL/https:\/\//https:\/\/$USERNAME:$PASSWORD@}"
-  
-  echo "Setting remote url $REMOTE_URL"
-  git config --local remote.origin.url "$REMOTE_URL"
 
+  git config --local remote.origin.url "$REMOTE_URL"
   git config commit.gpgsign "$SIGN"
   git config user.signingkey "$SIGNKEY"
   git config user.name "$USERNAME"
